@@ -68,7 +68,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('card-switch-tasks')
-        ->as('card-switch-tasks')
+        ->as('card-switch-tasks.')
         ->controller(CardSwitchTaskAPIController::class)
         ->group(function () {
 
@@ -76,9 +76,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::post('', 'store')->name('store');
 
-        Route::match(['patch', 'put'], '{id}/markTaskFinished', 'markTaskFinished')->name('update.markTaskFinished');
+        Route::patch( '{id}/mark-finished', 'markFinished')
+            ->name('markFinished');
 
-        Route::match(['patch', 'put'], '{id}/markTaskFailed', 'markTaskFailed')->name('update.markTaskFailed');
+        Route::patch('{id}/mark-failed', 'markFailed')
+            ->name('markFailed');
 
     });
 });

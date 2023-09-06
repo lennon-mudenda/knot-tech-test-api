@@ -2,6 +2,8 @@
 
 namespace Tests;
 
+use App\Models\User;
+use App\Models\Role;
 use Illuminate\Support\Str;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
@@ -13,9 +15,9 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        $this->artisan('migrate');
+//        $this->artisan('migrate');
 
-        $this->artisan('db:seed');
+//        $this->artisan('db:seed');
     }
 
     protected function urlFromTemplate(string $template, array $params = []): string
@@ -28,5 +30,16 @@ abstract class TestCase extends BaseTestCase
         }
 
         return '/api/v1' . $url;
+    }
+
+    protected function asUser(): self
+    {
+        $user = User::where('role_uuid', Role::USER_UUID)->first();
+
+        if (!$user) {
+            $user = User::factory()->create();
+        }
+
+        return $this->actingAs($user);
     }
 }

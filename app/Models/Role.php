@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
- use Illuminate\Database\Eloquent\SoftDeletes; use Illuminate\Database\Eloquent\Factories\HasFactory;
+ use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 /**
  * @OA\Schema(
  *      schema="Role",
@@ -47,9 +49,17 @@ use Illuminate\Database\Eloquent\Model;
  *          format="date-time"
  *      )
  * )
- */class Role extends Model
+ */
+class Role extends Model
 {
-     use SoftDeletes;    use HasFactory;    public $table = 'roles';
+    use SoftDeletes;
+    use HasFactory;
+
+    public $table = 'roles';
+
+    const ADMIN_UUID = '268f472e-38de-4830-b758-c0d220070f60';
+
+    const USER_UUID = 'ced75453-a388-495f-b860-606abed1cb59';
 
     public $fillable = [
         'uuid',
@@ -69,8 +79,8 @@ use Illuminate\Database\Eloquent\Model;
         'deleted_at' => 'nullable'
     ];
 
-    public function users(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function users(): HasMany
     {
-        return $this->hasMany(\App\Models\User::class, 'role_id');
+        return $this->hasMany(User::class, 'role_id');
     }
 }

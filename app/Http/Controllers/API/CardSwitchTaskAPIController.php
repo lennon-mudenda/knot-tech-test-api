@@ -127,20 +127,24 @@ class CardSwitchTaskAPIController extends AppBaseController
         $cardSwitchTask = $this->cardSwitchTaskRepository->find($id);
 
         if (empty($cardSwitchTask)) {
-            return $this->sendError('Card Switch Task not found');
+            return $this->sendError('Card Switch Task not found', 409);
         }
 
         $lastTask = $this->getPreviousCardSwitchTask($cardSwitchTask->merchant_id);
 
-        $lastTask?->delete();
+        if ($input['status_uuid'] == Status::FINISHED_UUID) {
+            $lastTask?->delete();
+        }
 
         $cardSwitchTask = $this->cardSwitchTaskRepository->update($input, $id);
+
+        $cardSwitchTask->with('status');
 
         return $this->sendResponse($cardSwitchTask->toArray(), 'CardSwitchTask updated successfully');
     }
 
     /**
-     * @OA\Put(
+     * @OA\Patch(
      *      path="/card-switch-tasks/{id}/markTaskFinished",
      *      summary="markTaskFinished",
      *      tags={"CardSwitchTask"},
@@ -178,7 +182,7 @@ class CardSwitchTaskAPIController extends AppBaseController
      *      )
      * )
      */
-    public function markTaskFinished($id): JsonResponse
+    public function markFinished($id): JsonResponse
     {
         $payload = [
             'status_id' => Status::where('uuid', Status::FINISHED_UUID)->first()->id,
@@ -227,7 +231,7 @@ class CardSwitchTaskAPIController extends AppBaseController
      *      )
      * )
      */
-    public function markTaskFailed($id): JsonResponse
+    public function markFailed($id): JsonResponse
     {
         $payload = [
             'status_id' => Status::where('uuid', Status::FAILED_UUID)->first()->id,

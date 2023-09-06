@@ -9,7 +9,7 @@ use Illuminate\Support\Arr;
 class RegAPITest extends TestCase
 {
     /**
-     * Test user registration
+     * Test user registration scenarios
      */
     public function test_user_registration(): void
     {
@@ -23,14 +23,14 @@ class RegAPITest extends TestCase
             ]
         );
 
-        $response = $this->post(
+        $response = $this->postJson(
             $this->urlFromTemplate('/users/register'),
             $validDetails
         );
 
         $response->assertStatus(200);
 
-        $response = $this->post(
+        $response = $this->postJson(
             $this->urlFromTemplate('/users/register'),
             $details
         );

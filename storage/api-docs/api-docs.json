@@ -363,13 +363,13 @@
             }
         },
         "/card-switch-tasks/{id}/markTaskFinished": {
-            "put": {
+            "patch": {
                 "tags": [
                     "CardSwitchTask"
                 ],
                 "summary": "markTaskFinished",
                 "description": "Update CardSwitchTask and Mark as Failed",
-                "operationId": "75a464cf4a2a5cdf1d7b47aebf32d543",
+                "operationId": "7e907406c3de7be351bec322035f9be9",
                 "parameters": [
                     {
                         "name": "id",

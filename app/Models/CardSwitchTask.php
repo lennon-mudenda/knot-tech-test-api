@@ -108,10 +108,6 @@ class CardSwitchTask extends Model
         'user_uuid' => 'string'
     ];
 
-    protected $with = [
-        'status'
-    ];
-
     public static array $rules = [
         'card_id' => 'required',
         'merchant_id' => 'required',

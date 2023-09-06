@@ -9,7 +9,7 @@ use Illuminate\Support\Arr;
 class AuthAPITest extends TestCase
 {
     /**
-     * Test user Authentication.
+     * Test user Authentication scenarios.
      */
     public function test_user_login(): void
     {
@@ -20,7 +20,7 @@ class AuthAPITest extends TestCase
             'password' => 'password',
         ];
 
-        $response = $this->post(
+        $response = $this->postJson(
             $this->urlFromTemplate('/users/auth/login'),
             $validCredentials
         );
@@ -29,8 +29,8 @@ class AuthAPITest extends TestCase
 
         $invalidCredentials = Arr::only($validCredentials, 'email');
 
-        $response = $this->post(
-            $this->urlFromTemplate('/users/register'),
+        $response = $this->postJson(
+            $this->urlFromTemplate('/users/auth/login'),
             $invalidCredentials
         );
 
@@ -38,8 +38,8 @@ class AuthAPITest extends TestCase
 
         $invalidCredentials['password'] = 'ClearlyWrongPassword';
 
-        $response = $this->post(
-            $this->urlFromTemplate('/users/register'),
+        $response = $this->postJson(
+            $this->urlFromTemplate('/users/auth/login'),
             $invalidCredentials
         );
 

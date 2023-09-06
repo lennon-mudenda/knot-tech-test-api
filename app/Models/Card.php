@@ -87,8 +87,8 @@ class Card extends Model
     ];
 
     public static array $rules = [
-        'number' => 'required|string|max:16|min:16',
-        'cvv' => 'required|string|max:3|min3',
+        'number' => 'required|string|size:16',
+        'cvv' => 'required|string|size:3',
         'expiry' => 'required',
     ];
 

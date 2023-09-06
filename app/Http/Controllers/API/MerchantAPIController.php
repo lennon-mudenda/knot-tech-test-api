@@ -29,9 +29,10 @@ class MerchantAPIController extends AppBaseController
      *      summary="getMerchantList",
      *      tags={"Merchant"},
      *      description="Get all Merchants",
+     *      security={{"sanctum":{}}},
      *      @OA\Response(
      *          response=200,
-     *          description="successful operation",
+     *          description="Merchants retrieved successfully",
      *          @OA\JsonContent(
      *              type="object",
      *              @OA\Property(

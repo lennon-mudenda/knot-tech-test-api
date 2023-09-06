@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 /**
  * @OA\Schema(
  *      schema="CardSwitchTask",
- *      required={"uuid","card_id","merchant_id","status_id","user_id"},
+ *      required={"card_id","merchant_id"},
  *      @OA\Property(
  *          property="uuid",
  *          description="",

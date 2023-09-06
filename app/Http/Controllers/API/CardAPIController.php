@@ -27,9 +27,10 @@ class CardAPIController extends AppBaseController
      *      summary="getCardList",
      *      tags={"Card"},
      *      description="Get all Cards",
+     *      security={{"sanctum":{}}},
      *      @OA\Response(
      *          response=200,
-     *          description="successful operation",
+     *          description="Cards retrieved successfully",
      *          @OA\JsonContent(
      *              type="object",
      *              @OA\Property(
@@ -66,13 +67,14 @@ class CardAPIController extends AppBaseController
      *      summary="createCard",
      *      tags={"Card"},
      *      description="Create Card",
+     *      security={{"sanctum":{}}},
      *      @OA\RequestBody(
      *        required=true,
      *        @OA\JsonContent(ref="#/components/schemas/Card")
      *      ),
      *      @OA\Response(
      *          response=200,
-     *          description="successful operation",
+     *          description="Card saved successfully",
      *          @OA\JsonContent(
      *              type="object",
      *              @OA\Property(
@@ -88,7 +90,11 @@ class CardAPIController extends AppBaseController
      *                  type="string"
      *              )
      *          )
-     *      )
+     *      ),
+     *     @OA\Response(
+     *          response=422,
+     *          description="Invalid Card Creation Data",
+     *     )
      * )
      */
     public function store(CreateCardAPIRequest $request): JsonResponse

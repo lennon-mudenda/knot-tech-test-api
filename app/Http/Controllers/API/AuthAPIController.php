@@ -70,7 +70,7 @@ class AuthAPIController extends AppBaseController
      *      summary="logoutUser",
      *      tags={"Auth"},
      *      description="Logs out authenticated user.",
-     *        security={{"sanctum":{}}},
+     *      security={{"sanctum":{}}},
      *      @OA\Response(
      *          response=200,
      *          description="successful operation",

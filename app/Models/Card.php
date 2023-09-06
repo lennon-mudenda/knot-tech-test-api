@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 /**
  * @OA\Schema(
  *      schema="Card",
- *      required={"uuid","number","cvv","expiry"},
+ *      required={"number","cvv","expiry"},
  *      @OA\Property(
  *          property="uuid",
  *          description="",
  *          readOnly=false,
- *          nullable=false,
+ *          nullable=true,
  *          type="string",
  *      ),
  *      @OA\Property(

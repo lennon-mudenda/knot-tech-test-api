@@ -30,9 +30,10 @@ class CardSwitchTaskAPIController extends AppBaseController
      *      summary="getCardSwitchTaskList",
      *      tags={"CardSwitchTask"},
      *      description="Get all CardSwitchTasks",
+     *      security={{"sanctum":{}}},
      *      @OA\Response(
      *          response=200,
-     *          description="successful operation",
+     *          description="Card Switch Tasks retrieved successfully",
      *          @OA\JsonContent(
      *              type="object",
      *              @OA\Property(
@@ -69,13 +70,14 @@ class CardSwitchTaskAPIController extends AppBaseController
      *      summary="createCardSwitchTask",
      *      tags={"CardSwitchTask"},
      *      description="Create CardSwitchTask",
+     *      security={{"sanctum":{}}},
      *      @OA\RequestBody(
      *        required=true,
      *        @OA\JsonContent(ref="#/components/schemas/CardSwitchTask")
      *      ),
      *      @OA\Response(
      *          response=200,
-     *          description="successful operation",
+     *          description="Card Switch Task saved successfully",
      *          @OA\JsonContent(
      *              type="object",
      *              @OA\Property(
@@ -91,7 +93,11 @@ class CardSwitchTaskAPIController extends AppBaseController
      *                  type="string"
      *              )
      *          )
-     *      )
+     *      ),
+     *     @OA\Response(
+     *          response=422,
+     *          description="Invalid Task Creation Data",
+     *     )
      * )
      */
     public function store(CreateCardSwitchTaskAPIRequest $request): JsonResponse
@@ -121,13 +127,17 @@ class CardSwitchTaskAPIController extends AppBaseController
         })->first();
     }
 
-    private function update($id, $input): JsonResponse
+    private function update($id, $input, $successMessage = 'CardSwitchTask updated successfully'): JsonResponse
     {
         /** @var CardSwitchTask $cardSwitchTask */
         $cardSwitchTask = $this->cardSwitchTaskRepository->find($id);
 
         if (empty($cardSwitchTask)) {
-            return $this->sendError('Card Switch Task not found', 409);
+            return $this->sendError('Card Switch Task not found', 404);
+        }
+
+        if ($cardSwitchTask->user_id != auth()->user()->getAuthIdentifier()) {
+            return $this->sendError('You can only update tasks you created', 401);
         }
 
         $lastTask = $this->getPreviousCardSwitchTask($cardSwitchTask->merchant_id);
@@ -140,15 +150,16 @@ class CardSwitchTaskAPIController extends AppBaseController
 
         $cardSwitchTask->with('status');
 
-        return $this->sendResponse($cardSwitchTask->toArray(), 'CardSwitchTask updated successfully');
+        return $this->sendResponse($cardSwitchTask->toArray(), $successMessage);
     }
 
     /**
      * @OA\Patch(
-     *      path="/card-switch-tasks/{id}/markTaskFinished",
+     *      path="/card-switch-tasks/{id}/mark-finished",
      *      summary="markTaskFinished",
      *      tags={"CardSwitchTask"},
      *      description="Update CardSwitchTask and Mark as Failed",
+     *      security={{"sanctum":{}}},
      *      @OA\Parameter(
      *          name="id",
      *          description="id of CardSwitchTask",
@@ -163,7 +174,7 @@ class CardSwitchTaskAPIController extends AppBaseController
      *      ),
      *      @OA\Response(
      *          response=200,
-     *          description="successful operation",
+     *          description="Task Marked as Finished Successfully",
      *          @OA\JsonContent(
      *              type="object",
      *              @OA\Property(
@@ -179,7 +190,15 @@ class CardSwitchTaskAPIController extends AppBaseController
      *                  type="string"
      *              )
      *          )
-     *      )
+     *      ),
+     *     @OA\Response(
+     *          response=404,
+     *          description="Card Switch Task Not Found",
+     *     ),
+     *     @OA\Response(
+     *          response=401,
+     *          description="Invalid Persmissions to update Card Switch Task",
+     *     )
      * )
      */
     public function markFinished($id): JsonResponse
@@ -189,15 +208,16 @@ class CardSwitchTaskAPIController extends AppBaseController
             'status_uuid' => Status::FINISHED_UUID,
         ];
 
-        return $this->update($id, $payload);
+        return $this->update($id, $payload, 'Task Marked as Finished Successfully');
     }
 
     /**
      * @OA\Patch(
-     *      path="/card-switch-tasks/{id}/markTaskFailed",
+     *      path="/card-switch-tasks/{id}/mark-failed",
      *      summary="markTaskFailed",
      *      tags={"CardSwitchTask"},
      *      description="Update CardSwitchTask and Mark as Failed",
+     *      security={{"sanctum":{}}},
      *      @OA\Parameter(
      *          name="id",
      *          description="id of CardSwitchTask",
@@ -212,7 +232,7 @@ class CardSwitchTaskAPIController extends AppBaseController
      *      ),
      *      @OA\Response(
      *          response=200,
-     *          description="successful operation",
+     *          description="Task Marked as Failed Successfully",
      *          @OA\JsonContent(
      *              type="object",
      *              @OA\Property(
@@ -228,7 +248,15 @@ class CardSwitchTaskAPIController extends AppBaseController
      *                  type="string"
      *              )
      *          )
-     *      )
+     *      ),
+     *     @OA\Response(
+     *          response=404,
+     *          description="Card Switch Task Not Found",
+     *     ),
+     *     @OA\Response(
+     *          response=401,
+     *          description="Invalid Persmissions to update Card Switch Task",
+     *     )
      * )
      */
     public function markFailed($id): JsonResponse
@@ -238,6 +266,6 @@ class CardSwitchTaskAPIController extends AppBaseController
             'status_uuid' => Status::FAILED_UUID,
         ];
 
-        return $this->update($id, $payload);
+        return $this->update($id, $payload, 'Task Marked as Failed Successfully');
     }
 }

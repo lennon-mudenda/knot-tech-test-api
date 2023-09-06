@@ -39,7 +39,7 @@ class RegistrationAPIController extends Controller
      *      ),
      *      @OA\Response(
      *          response=200,
-     *          description="successful operation",
+     *          description="User Registered Successfully",
      *          @OA\JsonContent(
      *              type="object",
      *              @OA\Property(
@@ -59,7 +59,7 @@ class RegistrationAPIController extends Controller
      *      ),
      *     @OA\Response(
      *          response=422,
-     *          description="Invalid Input"
+     *          description="Invalid Registration Data"
      *     )
      * )
      */

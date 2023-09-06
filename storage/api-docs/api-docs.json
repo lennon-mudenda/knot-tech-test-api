@@ -218,7 +218,7 @@
                 "operationId": "044799046928fe5155dc986793ccc34f",
                 "responses": {
                     "200": {
-                        "description": "successful operation",
+                        "description": "Cards retrieved successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -241,7 +241,12 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
             },
             "post": {
                 "tags": [
@@ -262,7 +267,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "successful operation",
+                        "description": "Card saved successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -281,8 +286,16 @@
                                 }
                             }
                         }
+                    },
+                    "422": {
+                        "description": "Invalid Card Creation Data"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
             }
         },
         "/card-switch-tasks": {
@@ -295,7 +308,7 @@
                 "operationId": "3a6b572ff44189b1805281812aaccd66",
                 "responses": {
                     "200": {
-                        "description": "successful operation",
+                        "description": "Card Switch Tasks retrieved successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -318,7 +331,12 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
             },
             "post": {
                 "tags": [
@@ -339,7 +357,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "successful operation",
+                        "description": "Card Switch Task saved successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -358,18 +376,26 @@
                                 }
                             }
                         }
+                    },
+                    "422": {
+                        "description": "Invalid Task Creation Data"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
             }
         },
-        "/card-switch-tasks/{id}/markTaskFinished": {
+        "/card-switch-tasks/{id}/mark-finished": {
             "patch": {
                 "tags": [
                     "CardSwitchTask"
                 ],
                 "summary": "markTaskFinished",
                 "description": "Update CardSwitchTask and Mark as Failed",
-                "operationId": "7e907406c3de7be351bec322035f9be9",
+                "operationId": "e9e61352e15728a687237e45c604287e",
                 "parameters": [
                     {
                         "name": "id",
@@ -386,7 +412,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "successful operation",
+                        "description": "Task Marked as Finished Successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -405,18 +431,29 @@
                                 }
                             }
                         }
+                    },
+                    "404": {
+                        "description": "Card Switch Task Not Found"
+                    },
+                    "401": {
+                        "description": "Invalid Persmissions to update Card Switch Task"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
             }
         },
-        "/card-switch-tasks/{id}/markTaskFailed": {
+        "/card-switch-tasks/{id}/mark-failed": {
             "patch": {
                 "tags": [
                     "CardSwitchTask"
                 ],
                 "summary": "markTaskFailed",
                 "description": "Update CardSwitchTask and Mark as Failed",
-                "operationId": "c12bb328e44ee96a8dd2db99f61b6964",
+                "operationId": "4b5cb0e6f556be896b363034754b11ca",
                 "parameters": [
                     {
                         "name": "id",
@@ -433,7 +470,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "successful operation",
+                        "description": "Task Marked as Failed Successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -452,8 +489,19 @@
                                 }
                             }
                         }
+                    },
+                    "404": {
+                        "description": "Card Switch Task Not Found"
+                    },
+                    "401": {
+                        "description": "Invalid Persmissions to update Card Switch Task"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
             }
         },
         "/merchants": {
@@ -466,7 +514,7 @@
                 "operationId": "af2bc28642f27db389032fdb1c759b0d",
                 "responses": {
                     "200": {
-                        "description": "successful operation",
+                        "description": "Merchants retrieved successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -489,7 +537,12 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
             }
         },
         "/users/register": {
@@ -526,7 +579,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "successful operation",
+                        "description": "User Registered Successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -550,7 +603,7 @@
                         }
                     },
                     "422": {
-                        "description": "Invalid Input"
+                        "description": "Invalid Registration Data"
                     }
                 }
             }
@@ -558,85 +611,8 @@
     },
     "components": {
         "schemas": {
-            "ApiUser": {
-                "required": [
-                    "uuid",
-                    "role_id",
-                    "name",
-                    "email",
-                    "password"
-                ],
-                "properties": {
-                    "uuid": {
-                        "description": "",
-                        "type": "string",
-                        "readOnly": false,
-                        "nullable": false
-                    },
-                    "role_uuid": {
-                        "description": "",
-                        "type": "string",
-                        "readOnly": false,
-                        "nullable": true
-                    },
-                    "name": {
-                        "description": "",
-                        "type": "string",
-                        "readOnly": false,
-                        "nullable": false
-                    },
-                    "email": {
-                        "description": "",
-                        "type": "string",
-                        "readOnly": false,
-                        "nullable": false
-                    },
-                    "email_verified_at": {
-                        "description": "",
-                        "type": "string",
-                        "format": "date-time",
-                        "readOnly": false,
-                        "nullable": true
-                    },
-                    "password": {
-                        "description": "",
-                        "type": "string",
-                        "readOnly": false,
-                        "nullable": false
-                    },
-                    "remember_token": {
-                        "description": "",
-                        "type": "string",
-                        "readOnly": false,
-                        "nullable": true
-                    },
-                    "created_at": {
-                        "description": "",
-                        "type": "string",
-                        "format": "date-time",
-                        "readOnly": true,
-                        "nullable": true
-                    },
-                    "updated_at": {
-                        "description": "",
-                        "type": "string",
-                        "format": "date-time",
-                        "readOnly": true,
-                        "nullable": true
-                    },
-                    "deleted_at": {
-                        "description": "",
-                        "type": "string",
-                        "format": "date-time",
-                        "readOnly": true,
-                        "nullable": true
-                    }
-                },
-                "type": "object"
-            },
             "Card": {
                 "required": [
-                    "uuid",
                     "number",
                     "cvv",
                     "expiry"
@@ -646,7 +622,7 @@
                         "description": "",
                         "type": "string",
                         "readOnly": false,
-                        "nullable": false
+                        "nullable": true
                     },
                     "number": {
                         "description": "",
@@ -693,11 +669,8 @@
             },
             "CardSwitchTask": {
                 "required": [
-                    "uuid",
                     "card_id",
-                    "merchant_id",
-                    "status_id",
-                    "user_id"
+                    "merchant_id"
                 ],
                 "properties": {
                     "uuid": {
@@ -868,6 +841,70 @@
                         "type": "string",
                         "readOnly": false,
                         "nullable": false
+                    },
+                    "created_at": {
+                        "description": "",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "updated_at": {
+                        "description": "",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    },
+                    "deleted_at": {
+                        "description": "",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "ApiUser": {
+                "required": [
+                    "uuid",
+                    "role_id",
+                    "name",
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "uuid": {
+                        "description": "",
+                        "type": "string",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "role_uuid": {
+                        "description": "",
+                        "type": "string",
+                        "readOnly": false,
+                        "nullable": true
+                    },
+                    "name": {
+                        "description": "",
+                        "type": "string",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "email": {
+                        "description": "",
+                        "type": "string",
+                        "readOnly": false,
+                        "nullable": false
+                    },
+                    "email_verified_at": {
+                        "description": "",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": false,
+                        "nullable": true
                     },
                     "created_at": {
                         "description": "",

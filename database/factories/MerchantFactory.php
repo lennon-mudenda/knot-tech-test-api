@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Merchant;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 
@@ -20,13 +21,13 @@ class MerchantFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
-        
+
         return [
-            'uuid' => $this->faker->text($this->faker->numberBetween(5, 36)),
-            'name' => $this->faker->text($this->faker->numberBetween(5, 255)),
-            'website' => $this->faker->text($this->faker->numberBetween(5, 255)),
+            'uuid' => Str::uuid(),
+            'name' => $this->faker->company(),
+            'website' => $this->faker->url(),
             'created_at' => $this->faker->date('Y-m-d H:i:s'),
             'updated_at' => $this->faker->date('Y-m-d H:i:s'),
             'deleted_at' => $this->faker->date('Y-m-d H:i:s')

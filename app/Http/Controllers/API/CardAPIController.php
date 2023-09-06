@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\API;
 
+use DateTime;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Repositories\CardRepository;
@@ -96,10 +98,13 @@ class CardAPIController extends AppBaseController
      *          description="Invalid Card Creation Data",
      *     )
      * )
+     * @throws Exception
      */
     public function store(CreateCardAPIRequest $request): JsonResponse
     {
         $input = $request->all();
+
+        $input['expiry'] = $request->getParsedExpiryDate();
 
         $card = $this->cardRepository->create($input);
 

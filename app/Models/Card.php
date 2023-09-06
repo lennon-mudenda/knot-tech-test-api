@@ -89,7 +89,6 @@ class Card extends Model
     public static array $rules = [
         'number' => 'required|string|size:16',
         'cvv' => 'required|string|size:3',
-        'expiry' => 'required',
     ];
 
     public function cardSwitchTasks(): HasMany

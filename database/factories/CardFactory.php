@@ -28,7 +28,7 @@ class CardFactory extends Factory
             'uuid' => Str::uuid(),
             'number' => $this->faker->creditCardNumber,
             'cvv' => (string) $this->faker->numberBetween(100, 999),
-            'expiry' => $this->faker->creditCardExpirationDate(true),
+            'expiry' => $this->faker->creditCardExpirationDate(true)->format('m/y'),
             'created_at' => $this->faker->date('Y-m-d H:i:s'),
             'updated_at' => $this->faker->date('Y-m-d H:i:s'),
             'deleted_at' => $this->faker->date('Y-m-d H:i:s')

@@ -2,14 +2,12 @@
 
 namespace Database\Factories;
 
+use App\Models\Card;
+use App\Models\Status;
+use App\Models\Merchant;
 use Illuminate\Support\Str;
 use App\Models\CardSwitchTask;
 use Illuminate\Database\Eloquent\Factories\Factory;
-
-use App\Models\Card;
-use App\Models\User;
-use App\Models\Status;
-use App\Models\Merchant;
 
 class CardSwitchTaskFactory extends Factory
 {
@@ -28,13 +26,7 @@ class CardSwitchTaskFactory extends Factory
     public function definition(): array
     {
 
-        $user = User::first();
-
-        if (!$user) {
-            $user = User::factory()->create();
-        }
-
-        $status = fake()->randomElement(Status::all());
+        $status = Status::where('uuid', Status::INITIATED_UUID)->first();
 
         $merchant = fake()->randomElement(Merchant::all());
 
@@ -44,18 +36,22 @@ class CardSwitchTaskFactory extends Factory
             $card = Card::factory()->create();
         }
 
+        if (!$merchant) {
+            $merchant = Merchant::factory()->create();
+        }
+
         return [
             'uuid' => Str::uuid(),
             'card_uuid' => $card->uuid,
             'previous_card_uuid' => null,
             'merchant_uuid' => $merchant->uuid,
             'status_uuid' => $status->uuid,
-            'user_uuid' => $user->uuid,
+            'user_uuid' => $card->user->uuid,
             'card_id' => $card->id,
             'previous_card_id' => null,
             'merchant_id' => $merchant->id,
             'status_id' => $status->id,
-            'user_id' => $user->id,
+            'user_id' => $card->user->id,
             'created_at' => $this->faker->date('Y-m-d H:i:s'),
             'updated_at' => $this->faker->date('Y-m-d H:i:s'),
             'deleted_at' => $this->faker->date('Y-m-d H:i:s')

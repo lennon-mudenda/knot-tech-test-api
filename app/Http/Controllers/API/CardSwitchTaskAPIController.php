@@ -109,6 +109,7 @@ class CardSwitchTaskAPIController extends AppBaseController
                 'uuid' => Str::uuid(),
                 'user_id' => auth()->user()->getAuthIdentifier(),
                 'status_id' => Status::where('uuid', Status::INITIATED_UUID)->first()->id,
+                'status_uuid' => Status::INITIATED_UUID,
                 'previous_card_id' => $lastTask?->id,
             ]
         );
@@ -138,6 +139,10 @@ class CardSwitchTaskAPIController extends AppBaseController
 
         if ($cardSwitchTask->user_id != auth()->user()->getAuthIdentifier()) {
             return $this->sendError('You can only update tasks you created', 401);
+        }
+
+        if ($cardSwitchTask->status_uuid != Status::INITIATED_UUID) {
+            return $this->sendError('Task already at end state. Cannot be marked failed/finished.', 422);
         }
 
         $lastTask = $this->getPreviousCardSwitchTask($cardSwitchTask->merchant_id);

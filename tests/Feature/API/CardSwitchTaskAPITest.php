@@ -3,11 +3,10 @@
 namespace Tests\Feature\API;
 
 use Tests\TestCase;
+use App\Models\Status;
 use Tests\ApiTestTrait;
 use Illuminate\Support\Arr;
 use App\Models\CardSwitchTask;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class CardSwitchTaskAPITest extends TestCase
 {
@@ -17,8 +16,7 @@ class CardSwitchTaskAPITest extends TestCase
     {
         parent::setUp();
 
-        CardSwitchTask::factory()->count(3)->create();
-
+        CardSwitchTask::factory()->create();
     }
 
     /**
@@ -57,7 +55,11 @@ class CardSwitchTaskAPITest extends TestCase
      */
     public function test_mark_card_switch_task_as_failed()
     {
-        $cardSwitchTask = fake()->randomElement(CardSwitchTask::all());
+        $cardSwitchTask = CardSwitchTask::where('status_uuid', Status::INITIATED_UUID)->first();
+
+        if (!$cardSwitchTask) {
+            $cardSwitchTask = CardSwitchTask::factory()->create();
+        }
 
         $this->response = $this->asUser()->patchJson(
             $this->urlFromTemplate('/card-switch-tasks/{id}/mark-failed', ['id' => $cardSwitchTask->id])
@@ -71,7 +73,11 @@ class CardSwitchTaskAPITest extends TestCase
      */
     public function test_mark_card_switch_task_as_finished()
     {
-        $cardSwitchTask = fake()->randomElement(CardSwitchTask::all());
+        $cardSwitchTask = CardSwitchTask::where('status_uuid', Status::INITIATED_UUID)->first();
+
+        if (!$cardSwitchTask) {
+            $cardSwitchTask = CardSwitchTask::factory()->create();
+        }
 
         $this->response = $this->asUser()->patchJson(
             $this->urlFromTemplate('/card-switch-tasks/{id}/mark-finished', ['id' => $cardSwitchTask->id])

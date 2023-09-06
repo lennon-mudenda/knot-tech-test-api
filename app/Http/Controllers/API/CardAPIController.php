@@ -106,6 +106,8 @@ class CardAPIController extends AppBaseController
 
         $input['expiry'] = $request->getParsedExpiryDate();
 
+        $input['user_id'] = auth()->user()->getAuthIdentifier();
+
         $card = $this->cardRepository->create($input);
 
         return $this->sendResponse($card->toArray(), 'Card saved successfully');

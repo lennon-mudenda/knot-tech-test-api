@@ -36,8 +36,6 @@ class CardSwitchTaskRepository extends BaseRepository
     {
         $search['status_uuid'] = Status::FINISHED_UUID;
 
-        $search['user_id'] = auth()->user()->getAuthIdentifier();
-
         $query = $this->allQuery($search, $skip, $limit);
 
         $query->join('merchants as m', 'card_switch_tasks.merchant_id', '=', 'm.id');
@@ -45,6 +43,8 @@ class CardSwitchTaskRepository extends BaseRepository
         $query->join('cards as c', 'card_switch_tasks.card_id', '=', 'c.id');
 
         $query->join('statuses as s', 'card_switch_tasks.status_id', '=', 's.id');
+
+        $query->where('card_switch_tasks.user_id', '=', auth()->user()->getAuthIdentifier());
 
         $columns = [
             'card_switch_tasks.id',

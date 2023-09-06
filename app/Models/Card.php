@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
  use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 /**
  * @OA\Schema(
@@ -76,7 +77,9 @@ class Card extends Model
         'uuid',
         'number',
         'cvv',
-        'expiry'
+        'expiry',
+        'user_id',
+        'user_uuid'
     ];
 
     protected $casts = [
@@ -94,5 +97,10 @@ class Card extends Model
     public function cardSwitchTasks(): HasMany
     {
         return $this->hasMany(CardSwitchTask::class, 'card_id');
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

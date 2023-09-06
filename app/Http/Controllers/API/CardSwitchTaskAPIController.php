@@ -109,6 +109,7 @@ class CardSwitchTaskAPIController extends AppBaseController
                 'uuid' => Str::uuid(),
                 'user_id' => auth()->user()->getAuthIdentifier(),
                 'status_id' => Status::where('uuid', Status::INITIATED_UUID)->first()->id,
+                'status_uuid' => Status::INITIATED_UUID,
                 'previous_card_id' => $lastTask?->id,
             ]
         );
